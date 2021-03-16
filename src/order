@@ -1,0 +1,62 @@
+yarn typeorm migration:create -n CreateSurveys
+--code migration
+yarn typeorm migration:run
+
+--Jest
+{
+    yarn add jest @types/jest -D
+    yarn jest --init 
+    Would you like to use Jest when running "test" script in "package.json"? ... yes
+    √ Would you like to use Typescript for the configuration file? ... yes
+    √ Choose the test environment that will be used for testing » node
+    √ Do you want Jest to add coverage reports? ... no
+    √ Which provider should be used to instrument code for coverage? » v8
+    √ Automatically clear mock calls and instances between every test? ... yes
+
+    jest.config.js
+        bail: true,
+        // testEnvironment: "node",
+        testMatch: [    "**/__tests__/*.test.ts",  ],
+        preset: "ts-jest",
+
+    yarn add ts-jest -D
+}
+
+--Supertest
+{
+    yarn add supertest @types/supertest -D
+}
+
+--Users_Surveys
+{
+    yarn typeorm migration:create -n CreateSurverysUsers
+    yarn typeorm migration:run
+}
+
+--Nodemailer
+{
+    yarn add nodemailer
+    yarn add @types/nodemailer -D
+}
+
+--Handlebars
+{
+    yarn add handlebars
+    yarn add @types/handlebars -D
+}
+
+--Validations
+{
+    yarn add yup
+}
+
+--Error
+{
+    yarn add express-async-errors
+}
+
+--bcryptjs
+{
+    yarn add bcryptjs
+    yarn add @types/bcryptjs -D
+}
