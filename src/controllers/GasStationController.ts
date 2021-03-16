@@ -9,11 +9,6 @@ class GasStationController{
         var {FU,city,district,distributor} = request.query;
         console.log(request.query)
 
-        FU = FU ? FU : '-1';
-        city = city ? city : '-1';
-        district = district ? district : '-1';      
-        distributor = distributor ? distributor : '-1';
-
         const gasStationRepository = getCustomRepository(GasStationRepository);
 
         const gasStationList = await gasStationRepository
@@ -24,10 +19,10 @@ class GasStationController{
         "AND (gas_station.district = :district OR '-1' = :district)"+
         "AND (gas_station.distributor = :distributor OR '-1' = :distributor)"
         ,{
-            FU: FU, 
-            city: city, 
-            district: district,
-            distributor: distributor
+            FU: FU ? FU : '-1', 
+            city: city ? city : '-1', 
+            district: district ? district : '-1',
+            distributor: distributor ? distributor : '-1'
         })
         .getMany();
 
