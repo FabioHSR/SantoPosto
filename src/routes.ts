@@ -1,21 +1,56 @@
-import  {Router} from "express";
-import { UserController } from "./controllers/UserController";
-import { AnswerController } from "./controllers/AnswerController";
-import {GasStationController} from "./controllers/GasStationController";
+import { Router } from "express";
+import UserController from "./controllers/UserController";
+import RatingController from "./controllers/RatingController";
+import StationController from "./controllers/StationController";
 
 const router = Router();
 
-const userController = new UserController();
-const answerController = new AnswerController();
-const gasStationController = new GasStationController();
+// ----- User -----
+const userController = new UserController()
 
-router.post("/users", userController.create);
-router.get("/login", userController.login);
+// INSERT
+router.post("/User", (request, response) => {
+  userController.add(request, response)
+})
 
-router.get("/answers/:value",answerController.execute)
+// GET ALL
+router.get("/Users", (request, response, next) => {
+  userController.getAll(request, response)
+})
 
-router.get("/average/:station_id",gasStationController.execute)
-router.get("/postos",gasStationController.list)
+// GET BY ID
+router.get("/User/:_id", (request, response) => {
+  userController.getById(request, response)
+})
+
+// DELETE BY ID
+router.delete("/User/:_id", (request, response) => {
+  userController.deleteById(request, response)
+})
+
+// UPDATE
+router.patch("/User/:_id", (request, response) => {
+  userController.updateUser(request, response)
+})
+
+// - Rating -
+const ratingController = new RatingController()
+router.get("/answers/:value",)
+
+// - GasStation -
+const stationController = new StationController()
+
+router.get("/postos", (request, response) => {
+  stationController.getAll(request, response);
+})
+
+router.get("/postos/{id}", (request, response) => {
+  stationController.getById(request, response);
+})
+
+router.post("/postos/{id}")
+// router.delete()
+// router.put()
 
 
 export { router };
