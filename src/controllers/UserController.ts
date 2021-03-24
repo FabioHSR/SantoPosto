@@ -7,12 +7,12 @@ export default class UserController extends BaseController<IUser> {
 
     // - GET - /users # returns all Users
     getAll(request: Request, response: Response) {
-        super.getAll(request, response, User, process.env.USERS_COLLECTION_NAME)
+        super.getAll(request, response, process.env.USERS_COLLECTION_NAME)
     }
 
     // - GET - /user/{id} # returns User with chosen id
     getById(request: Request, response: Response) {
-        super.getById(request, response, User)
+        super.getById(request, response)
     }
 
     // - POST - /user # inserts new User into Collection
@@ -32,12 +32,12 @@ export default class UserController extends BaseController<IUser> {
         if (userAlreadyExists) {
             throw new AppError("User already exists");
         }
-        return super.add(request, response, User)
+        return super.add(request, response)
     }
 
     // - DELETE - /user/{id} # deletes User with chosen id
     deleteById(request: Request, response: Response) {
-        super.deleteById(request, response, User)
+        super.deleteById(request, response)
     }
 
     // - PUT - /user/{id} # updates User with chosen id

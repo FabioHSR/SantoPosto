@@ -4,8 +4,12 @@ import { MongoClient } from 'mongodb'
 import { User } from '../schemas/User'
 
 export default class Controller<T extends Document> {
+
   // - GET - returns all objects
-  protected getAll(request: Request, response: Response, currentObject: Model<T, {}>, collectionName) {
+  protected getAll(request: Request, response: Response, collectionName) {
+
+    let currentObject: Model<T, {}>
+
     if (JSON.stringify(request.query) !== "{}") {
       MongoClient.connect(process.env.DB_CONNECTION, function (err, db) {
 
@@ -38,7 +42,8 @@ export default class Controller<T extends Document> {
   }
 
   // - GET - returns object with chosen id
-  protected getById(request: Request, response: Response, currentObject: Model<T, {}>) {
+  protected getById(request: Request, response: Response) {
+    let currentObject: Model<T, {}>
     currentObject.findById(request.params._id)
       .exec()
       .then(doc => {
@@ -54,7 +59,8 @@ export default class Controller<T extends Document> {
   }
 
   // - POST - inserts new object into Collection
-  protected add(request: Request, response: Response, currentObject: Model<T, {}>) {
+  protected add(request: Request, response: Response) {
+    let currentObject: Model<T, {}>
     const body = new currentObject(request.body);
 
     body.save().then(result => {
@@ -68,7 +74,8 @@ export default class Controller<T extends Document> {
   }
 
   // - DELETE - deletes object with chosen id
-  protected deleteById(request: Request, response: Response, currentObject: Model<T, {}>) {
+  protected deleteById(request: Request, response: Response) {
+    let currentObject: Model<T, {}>
     const id = request.params._id
     currentObject.remove({ _id: id })
       .exec()
@@ -102,7 +109,8 @@ export default class Controller<T extends Document> {
   }
 
   // - PUT - # updates object with chosen id
-  protected async update(request: Request, response: Response, currentObject: Model<T, {}>) {
+  protected async update(request: Request, response: Response) {
+    let currentObject: Model<T, {}>
     currentObject.findByIdAndUpdate(request.params._id, request.body)
       .exec()
       .then(result => {
