@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { IRating, Rating } from '../schemas/Rating'
-import Controller from "./Controller";
+import BaseController from "./BaseController";
 
-export default class RatingController extends Controller<IRating> {
+export default class RatingController extends BaseController<IRating> {
     // - GET - /ratings # returns all Ratings
     getAll(request: Request, response: Response) {
-        super.getAll(request, response, Rating)
+        super.getAll(request, response, Rating, process.env.RATINGS_COLLECTION_NAME)
     }
 
     // - GET - /rating/{id} # returns Rating with chosen id
@@ -20,7 +20,7 @@ export default class RatingController extends Controller<IRating> {
 
     // - DELETE - /rating/{id} # deletes Rating with chosen id
     deleteById(request: Request, response: Response) {
-        // super.deleteById(request, response, Rating)
+        super.deleteById(request, response, Rating)
     }
 
     // - PUT - /rating/{id} # updates Rating with chosen id

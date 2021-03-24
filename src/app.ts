@@ -4,8 +4,6 @@ import "express-async-errors";
 import { router } from './routes';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
-import { MongoClient } from 'mongodb'
-import qs2m from 'qs-to-mongo'
 
 // createConnection();
 const app = express();

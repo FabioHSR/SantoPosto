@@ -4,6 +4,7 @@ export interface IRating extends Document {
     user_id: string;
     station_id: string;
     rate: string;
+    description: string;
 }
 
 const RatingSchema = new Schema({
@@ -22,6 +23,10 @@ const RatingSchema = new Schema({
         require: true,
         readonly: true
     },
+    description: {
+        type: String,
+        readonly: true
+    }
 }, {
     timestamps: true
 })

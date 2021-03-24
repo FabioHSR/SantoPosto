@@ -6,76 +6,64 @@ export interface IStation extends Document {
     address: string;
     complement: string;
     district: string;
-    zip_code: Number;
+    zip_code: number;
     FU: string;
     city: string;
     distributor: string;
     authorization_code: string;
     authorization_date: Date;
-    simp: Number;
+    simp: number;
+    rating: number;
 }
 
 const StationSchema: Schema = new Schema({
     CNPJ: {
         type: String,
         require: true,
-        readonly: true
     },
     company_name: {
         type: String,
         require: true,
-        readonly: true
     },
     address: {
         type: String,
         require: true,
-        readonly: true
     },
     complement: {
         type: String,
-        require: true,
-        readonly: true
     },
     district: {
         type: String,
-        require: true,
-        readonly: true
     },
     zip_code: {
         type: Number,
         require: true,
-        readonly: true
     },
     FU: {
         type: String,
         require: true,
-        readonly: true
     },
     city: {
         type: String,
         require: true,
-        readonly: true
     },
     distributor: {
         type: String,
         require: true,
-        readonly: true
     },
     authorization_code: {
         type: String,
-        require: true,
-        readonly: true
     },
     authorization_date: {
         type: Date,
-        require: true,
-        readonly: true
     },
     simp: {
         type: Number,
-        require: true,
-        readonly: true
     },
+    rating: {
+        type: Number,
+        required: true
+    }
 }, {
     timestamps: true
 })

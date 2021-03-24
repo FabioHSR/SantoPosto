@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import { AppError } from "../errors/AppError";
-import bcrypt, { compare, hash } from "bcryptjs";
-import Controller from "./Controller";
 import { IUser, User } from '../schemas/User'
+import BaseController from "./BaseController";
 
-export default class UserController extends Controller<IUser> {
+export default class UserController extends BaseController<IUser> {
 
     // - GET - /users # returns all Users
     getAll(request: Request, response: Response) {
-        super.getAll(request, response, User)
+        super.getAll(request, response, User, process.env.USERS_COLLECTION_NAME)
     }
 
     // - GET - /user/{id} # returns User with chosen id
@@ -18,7 +17,7 @@ export default class UserController extends Controller<IUser> {
 
     // - POST - /user # inserts new User into Collection
     add(request: Request, response: Response) {
-        const { email, password } = request.body
+        const { email } = request.body
         let userAlreadyExists
 
         User.exists({ 'email': email }, function (err, doc) {
@@ -26,7 +25,6 @@ export default class UserController extends Controller<IUser> {
                 console.log(err)
                 userAlreadyExists = false
             } else {
-                console.log("Result :", doc) // false
                 userAlreadyExists = true
             }
         });
@@ -34,9 +32,6 @@ export default class UserController extends Controller<IUser> {
         if (userAlreadyExists) {
             throw new AppError("User already exists");
         }
-
-        // request.body.password = hash(password, 10)
-
         return super.add(request, response, User)
     }
 
@@ -46,7 +41,12 @@ export default class UserController extends Controller<IUser> {
     }
 
     // - PUT - /user/{id} # updates User with chosen id
-    updateUser(request: Request, response: Response) {
-        super.update(request, response, User)
+    updateById(request: Request, response: Response) {
+        super.updateUser(request, response)
+    }
+
+    // - POST - /user/login
+    login() {
+
     }
 }

@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { IStation, Station } from "../schemas/Station";
-import Controller from "./Controller";
+import BaseController from "./BaseController";
 
-export default class StationController extends Controller<IStation> {
+export default class StationController extends BaseController<IStation> {
     // - GET - /postos # returns all Gas Stations
     getAll(request: Request, response: Response) {
-        super.getAll(request, response, Station)
+        super.getAll(request, response, Station, process.env.STATIONS_COLLECTION_NAME)
     }
 
     // - GET - /posto/{id} # returns Gas Station with chosen id
@@ -20,7 +20,7 @@ export default class StationController extends Controller<IStation> {
 
     // - DELETE - /posto/{id} # deletes Gas Station with chosen id
     deleteById(request: Request, response: Response) {
-        // super.deleteById(request, response, Station)
+        super.deleteById(request, response, Station)
     }
 
     // - PUT - /posto/{id} # updates Gas Station with chosen id
