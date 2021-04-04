@@ -7,12 +7,15 @@ import dotenv from 'dotenv'
 
 // createConnection();
 const app = express();
+const cors = require("cors");
 
 app.use(express.json());
 app.use(router);
+app.use(cors());
+app.use(express.static('build'));
 
-dotenv.config()
-const connectionString = process.env.DB_CONNECTION
+dotenv.config();
+const connectionString = process.env.DB_CONNECTION;
 
 mongoose.connect(connectionString, {
     useNewUrlParser: true, useUnifiedTopology: true

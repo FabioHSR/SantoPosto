@@ -6,7 +6,11 @@ import StationController from "./controllers/StationController";
 const router = Router();
 
 // ----- Início User Routes -----
-const userController = new UserController()
+const userController = new UserController();
+// Initial Page
+router.get("/", (request, response) => {
+  response.send("Welcome to our Heroku Application of Santo Posto!")
+})
 // INSERT
 router.post("/user", (request, response) => {
   userController.add(request, response)
