@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { Model, Document } from "mongoose";
 import { MongoClient } from 'mongodb'
 import { User } from '../schemas/User'
+import { isJSDocUnknownTag } from "typescript";
+import expressJwt from 'express-jwt';
 
 export default class Controller<T extends Document> {
 
@@ -115,4 +117,14 @@ export default class Controller<T extends Document> {
         response.status(500).json({ error: err })
       })
   }
+
+  // - GET TOKEN FOR ACCESS
+  public async getToken(request: Request, response: Response) {
+    const { id } = request.body;
+    return response.status(200).json({
+      token: expressJwt.sign({ id }, process.env.SECRET || 'SantoPostoSecret-2021', {
+        expiresIn: 300 // expires in 5min
+      })});
+  }
+
 }

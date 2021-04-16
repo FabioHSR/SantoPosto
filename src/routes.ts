@@ -1,4 +1,5 @@
 import { Router } from "express";
+import BaseController from "./controllers/BaseController";
 import UserController from "./controllers/UserController";
 import RatingController from "./controllers/RatingController";
 import StationController from "./controllers/StationController";
@@ -58,6 +59,7 @@ router.patch("/rating/:_id", (request, response) => {
 // ----- Fim Rating Routes -----
 
 // ----- Início Station Routes -----
+
 const stationController = new StationController()
 // INSERT
 router.post("/station", (request, response) => {
@@ -81,4 +83,15 @@ router.patch("/station/:_id", (request, response) => {
 })
 // ----- Fim Station Routes -----
 
+
+// ----- Início Base Routes -----
+
+const baseController = new BaseController()
+
+// GET ALL
+router.get("/getToken", (request, response) => {
+  baseController.getToken(request, response)
+})
+
+// ----- Fim Base Routes -----
 export { router };
