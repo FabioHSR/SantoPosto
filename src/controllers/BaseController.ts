@@ -4,12 +4,13 @@ import { MongoClient } from 'mongodb'
 import { User } from '../schemas/User'
 import { isJSDocUnknownTag } from "typescript";
 import expressJwt from 'express-jwt';
+import jsontoken from 'jsonwebtoken';
+import { nextTick } from "process";
 
 export default class Controller<T extends Document> {
 
   // - GET - returns all objects
   protected getAll(request: Request, response: Response, currentObject: Model<T, {}>, collectionName) {
-
     if (JSON.stringify(request.query) !== "{}") {
       MongoClient.connect(process.env.DB_CONNECTION, function (err, db) {
 
@@ -127,4 +128,13 @@ export default class Controller<T extends Document> {
       })});
   }
 
+  public async getTokenTeste(request: Request, response: Response) {
+    if(request.body.user === 'SantoPosto' && request.body.password === 'adm'){
+      const token = jsontoken.sign({userId: 1}, process.env.SECRET, {expiresIn: 300});
+      return response.json({auth: true, token});
+    }
+
+    response.status(401).end();
+  }
+  
 }

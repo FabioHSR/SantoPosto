@@ -11,7 +11,7 @@ const app = express();
 const cors = require("cors");
 
 app.use('/', expressJwt({ secret: process.env.SECRET || 'SantoPostoSecret-2021', algorithms: ['RS256'] }).unless({
-    path: ['/ratings', '/stations', '/getToken']
+    path: ['/ratings', '/stations', '/getToken', '/getTokenTeste']
 }));
 
 app.use(express.json());

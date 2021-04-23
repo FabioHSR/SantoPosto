@@ -3,13 +3,14 @@ import BaseController from "./controllers/BaseController";
 import UserController from "./controllers/UserController";
 import RatingController from "./controllers/RatingController";
 import StationController from "./controllers/StationController";
+import tokenExtract from "./tokenExtract/tokenExtract";
 
 const router = Router();
 
 // ----- Início User Routes -----
 const userController = new UserController();
 // Initial Page
-router.get("/", (request, response) => {
+router.get("/", tokenExtract , (request, response) => {
   response.send("Welcome to our Heroku Application of Santo Posto!")
 })
 // INSERT
@@ -92,6 +93,13 @@ const baseController = new BaseController()
 router.get("/getToken", (request, response) => {
   baseController.getToken(request, response)
 })
+
+
+// GET ALL
+router.post("/getTokenTeste", (request, response) => {
+  baseController.getTokenTeste(request, response)
+})
+
 
 // ----- Fim Base Routes -----
 export { router };
