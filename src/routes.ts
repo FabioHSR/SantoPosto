@@ -90,15 +90,10 @@ router.patch("/station/:_id", (request, response) => {
 const baseController = new BaseController()
 
 // GET ALL
-router.get("/getToken", (request, response) => {
+router.post("/Token", (request, response) => {
   baseController.getToken(request, response)
 })
 
-
-// GET ALL
-router.post("/getTokenTeste", (request, response) => {
-  baseController.getTokenTeste(request, response)
-})
 
 
 // ----- Fim Base Routes -----

@@ -120,15 +120,16 @@ export default class Controller<T extends Document> {
   }
 
   // - GET TOKEN FOR ACCESS
-  public async getToken(request: Request, response: Response) {
-    const { id } = request.body;
-    return response.status(200).json({
-      token: expressJwt.sign({ id }, process.env.SECRET || 'SantoPostoSecret-2021', {
-        expiresIn: 300 // expires in 5min
-      })});
-  }
+  //public async getToken(request: Request, response: Response) {
+  //  const { id } = request.body;
+  //  return response.status(200).json({
+  //    token: expressJwt.sign({ id }, process.env.SECRET || 'SantoPostoSecret-2021', {
+  //      expiresIn: 300 // expires in 5min
+  //    })});
+  //}
 
-  public async getTokenTeste(request: Request, response: Response) {
+  // - GET TOKEN FOR ACCESS
+  public async getToken(request: Request, response: Response) {
     if(request.body.user === 'SantoPosto' && request.body.password === 'adm'){
       const token = jsontoken.sign({userId: 1}, process.env.SECRET, {expiresIn: 300});
       return response.json({auth: true, token});
