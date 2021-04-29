@@ -10,9 +10,9 @@ import expressJwt from 'express-jwt';
 const app = express();
 const cors = require("cors");
 
-app.use('/', expressJwt({ secret: process.env.SECRET || 'SantoPostoSecret-2021', algorithms: ['RS256'] }).unless({
-    path: ['/ratings', '/stations', '/Token']
-}));
+//app.use('/', expressJwt({ secret: process.env.SECRET || 'SantoPostoSecret-2021', algorithms: ['RS256'] }).unless({
+//    path: ['/ratings', '/stations', '/Token']
+//}));
 
 app.use(express.json());
 app.use(router);
