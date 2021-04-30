@@ -3,9 +3,10 @@ import { Model, Document } from "mongoose";
 import { MongoClient } from 'mongodb'
 import { User } from '../schemas/User'
 import { isJSDocUnknownTag } from "typescript";
-import expressJwt from 'express-jwt';
 import jsontoken from 'jsonwebtoken';
 import { nextTick } from "process";
+
+
 
 export default class Controller<T extends Document> {
 
@@ -129,13 +130,13 @@ export default class Controller<T extends Document> {
   //}
 
   // - GET TOKEN FOR ACCESS
-  public async getToken(request: Request, response: Response) {
-    if(request.body.user === 'SantoPosto' && request.body.password === 'adm'){
-      const token = jsontoken.sign({userId: 1}, process.env.SECRET, {expiresIn: 300});
-      return response.json({auth: true, token});
-    }
+ public async getToken(request: Request, response: Response) {
+   if(request.body.user === 'SantoPosto' && request.body.password === 'adm'){
+     const token = jsontoken.sign({userId: '72482062-a959-11eb-bcbc-0242ac130002'}, process.env.SECRET, {expiresIn: 300});
+     return response.json({auth: true, token});
+   }
 
-    response.status(401).end();
-  }
+   response.status(401).end();
+ }
   
 }
