@@ -120,13 +120,8 @@ export default class Controller<T extends Document> {
   // - ADD StationRatingCounter
   public async addStationRatingCounter(request: Request, response: Response) {
     const stationId = request.body.station_id
-    const ratingId = request.body._id
 
     const stationResponse: Query<IStation, IStation, {}> = Station.findById(stationId)
-    // console.log("ratingId: " + ratingId)
-    // console.log("stationResponse: " + stationResponse)
-    // console.log("rating_num: " + (await stationResponse).rating_num)
-    // console.log("stationId: " + stationId)
 
     const rate = request.body.rate
     const num = (await stationResponse).rating_num
@@ -154,48 +149,40 @@ export default class Controller<T extends Document> {
   }
 
   // - DELETE StationRatingCounter
-  public async subtractStationRatingCounter(request: Request, response: Response, currentObject: Model<T, {}>) {
-    const ratingId = request.params._id
-    const ratingResponse: Query<IRating, IRating, {}> = Rating.findById(ratingId)
+  public subtractStationRatingCounter(request: Request, response: Response) {
+    return new Promise(async resolve => {
+      const ratingId = request.params._id
+      const ratingResponse: Query<IRating, IRating, {}> = Rating.findById(ratingId)
 
-    console.log("ratingId: " + ratingId)
-    console.log("ratingResponse: " + ratingResponse)
+      const rate = (await ratingResponse).rate
+      const stationId = (await ratingResponse).station_id
+      const stationResponse: Query<IStation, IStation, {}> = Station.findById(stationId)
 
-    const rate = (await ratingResponse).rate
-    console.log("rate: " + rate)
+      const num = (await stationResponse).rating_num
+      const rating = (await stationResponse).rating
 
-    const stationId = (await ratingResponse).station_id
-    console.log("stationId: " + stationId)
-
-    const stationResponse: Query<IStation, IStation, {}> = Station.findById(stationId)
-
-    const num = (await stationResponse).rating_num
-    const rating = (await stationResponse).rating
-
-    // console.log("stationResponse: " + stationResponse)
-    // console.log("rating_num: " + (await stationResponse).rating_num)
-    // console.log("stationId: " + stationId)
-
-    if (num == undefined) {
-      Station.updateMany(
-        { _id: stationId },
-        { rating_num: 0 },
-        { multi: true },
-        function (err, numberAffected) { });
-    } else {
-      const novoValor = num - 1
-      const avg = this.updateStationRatingAverageOnDelete(
-        num,
-        rating,
-        rate,
-        novoValor
-      )
-      Station.findByIdAndUpdate(stationId, {
-        "rating_num": novoValor,
-        "rating": avg
-      }).exec();
-      // this.deleteById(request, response, currentObject)
-    }
+      if (num == undefined) {
+        Station.updateMany(
+          { _id: stationId },
+          { rating_num: 0 },
+          { multi: true },
+          function (err, numberAffected) { });
+        resolve("Created rating_num field!");
+      } else {
+        const novoValor = num - 1
+        const avg = this.updateStationRatingAverageOnDelete(
+          num,
+          rating,
+          rate,
+          novoValor
+        )
+        Station.findByIdAndUpdate(stationId, {
+          "rating_num": novoValor,
+          "rating": avg
+        }).exec();
+        resolve("Station rating average updated!");
+      }
+    });
   }
 
   // - UPDATE StationRatingAverage on DELETE
