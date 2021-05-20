@@ -14,6 +14,7 @@ export interface IStation extends Document {
     authorization_date: Date;
     simp: number;
     rating: number;
+    rating_num: number;
     coord: ILatLng;
 }
 export interface ILatLng extends Document {
@@ -68,6 +69,9 @@ const StationSchema: Schema = new Schema({
     rating: {
         type: Number,
         required: true
+    },
+    rating_num: {
+        type: Number,
     },
     coord: {
         lat: Number,

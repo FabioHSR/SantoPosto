@@ -27,7 +27,6 @@ const RatingSchema = new Schema({
     rate: {
         type: Number,
         require: true,
-        readonly: true
     },
     description: {
         type: String,
