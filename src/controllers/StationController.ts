@@ -27,4 +27,9 @@ export default class StationController extends BaseController<IStation> {
     updateRating(request: Request, response: Response) {
         super.update(request, response, Station)
     }
+
+        // - PUT - /posto/{id} # updates Gas Station with chosen id
+    getByGeolocation(request: Request, response: Response) {
+        super.getByGeolocation(request, response, Station)
+    }
 }
