@@ -19,12 +19,12 @@ export default class StationController extends BaseController<IStation> {
     }
 
     // - DELETE - /posto/{id} # deletes Gas Station with chosen id
-    deleteById(request: Request, response: Response) {
+    async deleteById(request: Request, response: Response) {
         super.deleteById(request, response, Station)
     }
 
     // - PUT - /posto/{id} # updates Gas Station with chosen id
-    updateRating(request: Request, response: Response) {
+    updateStation(request: Request, response: Response) {
         super.update(request, response, Station)
     }
 
