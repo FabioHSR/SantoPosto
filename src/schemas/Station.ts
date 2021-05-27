@@ -1,4 +1,6 @@
 import { model, Model, Schema, Document } from "mongoose";
+import { Db } from "typeorm";
+import { ListFormat } from "typescript";
 
 export interface IStation extends Document {
     CNPJ: string;
@@ -15,11 +17,11 @@ export interface IStation extends Document {
     simp: number;
     rating: number;
     rating_num: number;
-    coord: ILatLng;
+    location: ILatLng;
 }
 export interface ILatLng extends Document {
-    lat: Number;
-    lng: Number;
+    type: String,
+    coordinates: [Number,Number]
 }
 
 const StationSchema: Schema = new Schema({
@@ -73,12 +75,14 @@ const StationSchema: Schema = new Schema({
     rating_num: {
         type: Number,
     },
-    coord: {
-        lat: Number,
-        lng: Number
+    location: {
+        type: String,
+        coordinates: ListFormat
     }
 }, {
     timestamps: true
 })
 
+
 export const Station: Model<IStation> = model<IStation>('Station', StationSchema)
+Station.collection.createIndex({ location: "2dsphere"})

@@ -81,6 +81,13 @@ router.delete("/station/:_id", (request, response) => {
 router.patch("/station/:_id", (request, response) => {
   stationController.updateStation(request, response)
 })
+
+// GET BY GEOLOCATION
+router.get("/station/geolocation/search", (request, response) => {
+  stationController.getByGeolocation(request, response)
+})
+
+
 // ----- Fim Station Routes -----
 
 

@@ -5,6 +5,8 @@ import { User } from '../schemas/User'
 import jsontoken from 'jsonwebtoken';
 import { IStation, Station } from "../schemas/Station";
 import { IRating, Rating } from "../schemas/Rating";
+import { nextTick } from "process";
+import {geolocation} from "../StationGeolocation/StationFilterGeolocation";
 
 export default class Controller<T extends Document> {
 
@@ -196,20 +198,6 @@ export default class Controller<T extends Document> {
     return ((num * rating) - Number(rate)) / novoValor
   }
 
-  // private async getStationAndRating(ratingId) {
-  //   const ratingResponse: Query<IRating, IRating, {}> = Rating.findById(ratingId)
-  //   console.log("ratingResponse: " + ratingResponse)
-  //   console.log("ratingId: " + ratingId)
-  //   const rate = (await ratingResponse).rate
-  //   const stationId = (await ratingResponse).station_id
-
-  //   const stationResponse: Query<IStation, IStation, {}> = Station.findById(stationId)
-  //   const num = (await stationResponse).rating_num
-  //   const rating = (await stationResponse).rating
-
-  //   return { rate, num, rating, stationId }
-  // }
-
   // - GET TOKEN FOR ACCESS
   public async getToken(request: Request, response: Response) {
     if (request.body.user === 'SantoPosto' && request.body.password === 'adm') {
@@ -217,5 +205,29 @@ export default class Controller<T extends Document> {
       return response.json({ auth: true, token });
     }
     response.status(401).end();
+  }
+
+  // - GET - returns a list of objects that has the values of geolocalization near of user search
+  protected getByGeolocation(request: Request, response: Response, currentObject: Model<T, {}>) {
+    currentObject.collection.find({
+      location:
+        { $near:
+           {
+             $geometry: { type: "Point",  coordinates: [request.body.lat, request.body.lng ] },
+             $minDistance: 0,
+             $maxDistance: 3000
+           }
+        }
+    })//.then(doc => {
+      //  if (doc) {
+      //    
+      //    response.status(200).json(doc)
+      //  } else {
+      //    response.status(404).json({ message: 'No valid entry found for provided ID' })
+      //  }
+      //})
+      //.catch(err => {
+      //  response.status(500).json({ error: err })
+      //})
   }
 }
