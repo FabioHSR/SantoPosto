@@ -10,7 +10,7 @@ const router = Router();
 // ----- Início User Routes -----
 const userController = new UserController();
 // Initial Page
-router.get("/", tokenExtract , (request, response) => {
+router.get("/", tokenExtract, (request, response) => {
   response.send("Welcome to our Heroku Application of Santo Posto!")
 })
 // INSERT
@@ -60,7 +60,6 @@ router.patch("/rating/:_id", (request, response) => {
 // ----- Fim Rating Routes -----
 
 // ----- Início Station Routes -----
-
 const stationController = new StationController()
 // INSERT
 router.post("/station", (request, response) => {
@@ -80,7 +79,7 @@ router.delete("/station/:_id", (request, response) => {
 })
 // UPDATE
 router.patch("/station/:_id", (request, response) => {
-  stationController.updateRating(request, response)
+  stationController.updateStation(request, response)
 })
 
 // GET BY GEOLOCATION
@@ -93,15 +92,12 @@ router.get("/station/geolocation/search", (request, response) => {
 
 
 // ----- Início Base Routes -----
-
 const baseController = new BaseController()
 
 // GET ALL
 router.post("/Token", (request, response) => {
   baseController.getToken(request, response)
 })
-
-
-
 // ----- Fim Base Routes -----
+
 export { router };
