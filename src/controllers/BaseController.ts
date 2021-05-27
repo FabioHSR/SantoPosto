@@ -6,6 +6,7 @@ import { isJSDocUnknownTag } from "typescript";
 import expressJwt from 'express-jwt';
 import jsontoken from 'jsonwebtoken';
 import { nextTick } from "process";
+import {geolocation} from "../StationGeolocation/StationFilterGeolocation";
 
 export default class Controller<T extends Document> {
 
@@ -142,18 +143,25 @@ export default class Controller<T extends Document> {
 
   // - GET - returns a list of objects that has the values of geolocalization near of user search
   protected getByGeolocation(request: Request, response: Response, currentObject: Model<T, {}>) {
-    currentObject.find({}, {"lat": request.body.lat, "lng": request.body.lng})
-      .exec()
-      .then(doc => {
-        if (doc) {
-          
-          response.status(200).json(doc)
-        } else {
-          response.status(404).json({ message: 'No valid entry found for provided ID' })
+    currentObject.collection.find({
+      location:
+        { $near:
+           {
+             $geometry: { type: "Point",  coordinates: [request.body.lat, request.body.lng ] },
+             $minDistance: 0,
+             $maxDistance: 3000
+           }
         }
-      })
-      .catch(err => {
-        response.status(500).json({ error: err })
-      })
+    })//.then(doc => {
+      //  if (doc) {
+      //    
+      //    response.status(200).json(doc)
+      //  } else {
+      //    response.status(404).json({ message: 'No valid entry found for provided ID' })
+      //  }
+      //})
+      //.catch(err => {
+      //  response.status(500).json({ error: err })
+      //})
   }
 }
