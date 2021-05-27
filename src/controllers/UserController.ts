@@ -46,7 +46,7 @@ export default class UserController extends BaseController<IUser> {
     }
 
     // - POST - /user/login
-    login() {
+    // login() {
 
-    }
+    // }
 }

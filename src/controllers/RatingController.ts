@@ -15,12 +15,20 @@ export default class RatingController extends BaseController<IRating> {
 
     // - POST - /rating # inserts new Rating into Collection
     add(request: Request, response: Response) {
+        super.addStationRatingCounter(request, response)
         super.add(request, response, Rating)
     }
 
     // - DELETE - /rating/{id} # deletes Rating with chosen id
-    deleteById(request: Request, response: Response) {
-        super.deleteById(request, response, Rating)
+    async deleteById(request: Request, response: Response) {
+        await (super.subtractStationRatingCounter(request, response))
+            .then(result => {
+                super.deleteById(request, response, Rating)
+                console.log("------ RESULT: " + result)
+            })
+            .catch(err => {
+                response.status(500).json({ error: err })
+            });
     }
 
     // - PUT - /rating/{id} # updates Rating with chosen id
