@@ -6,7 +6,7 @@ import { isJSDocUnknownTag } from "typescript";
 import expressJwt from 'express-jwt';
 import jsontoken from 'jsonwebtoken';
 import { nextTick } from "process";
-import {geolocation} from "../StationGeolocation/StationFilterGeolocation";
+//import {geolocation} from "../StationGeolocation/StationFilterGeolocation";
 
 export default class Controller<T extends Document> {
 
@@ -152,16 +152,13 @@ export default class Controller<T extends Document> {
              $maxDistance: 3000
            }
         }
-    })//.then(doc => {
-      //  if (doc) {
-      //    
-      //    response.status(200).json(doc)
-      //  } else {
-      //    response.status(404).json({ message: 'No valid entry found for provided ID' })
-      //  }
-      //})
-      //.catch(err => {
-      //  response.status(500).json({ error: err })
-      //})
-  }
+    }).map(doc => {
+        if (doc) {
+          
+          response.status(200).json(doc)
+        } else {
+          response.status(404).json({ message: 'No valid entry found for provided ID' })
+        }
+      })
+    }
 }

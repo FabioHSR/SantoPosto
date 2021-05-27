@@ -1,6 +1,7 @@
-import { model, Model, Schema, Document } from "mongoose";
+import { model, Model, Schema, Document, Mongoose } from "mongoose";
 import { Db } from "typeorm";
 import { ListFormat } from "typescript";
+import {geoJson} from "GeoJson"
 
 export interface IStation extends Document {
     CNPJ: string;
@@ -72,13 +73,19 @@ const StationSchema: Schema = new Schema({
         required: true
     },
     location: {
-        type: String,
-        coordinates: ListFormat
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+        type: [Number],
+        required: true
+        }
     }
 }, {
     timestamps: true
 })
-
 
 export const Station: Model<IStation> = model<IStation>('Station', StationSchema)
 Station.collection.createIndex({ location: "2dsphere"})
