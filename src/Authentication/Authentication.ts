@@ -2,11 +2,6 @@ import { NextFunction } from "express";
 import jsonToken from "jsonwebtoken";
 import { Request, Response } from "express";
 
-const Namespace = "AUTH";
-
-
-
-
 const tokenExtract = (request: Request, response: Response, next: NextFunction) =>{
     let token = request.headers['token']
 
@@ -26,7 +21,5 @@ const tokenExtract = (request: Request, response: Response, next: NextFunction) 
     else{
         response.status(401).end();
     }
-
   }
-
 export default tokenExtract;

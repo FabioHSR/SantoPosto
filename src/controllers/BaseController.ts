@@ -1,12 +1,8 @@
 import { Request, Response } from "express";
-import { Model, Document, Query } from "mongoose";
+import { Model, Document } from "mongoose";
 import { MongoClient } from 'mongodb'
 import { User } from '../schemas/User'
 import jsontoken from 'jsonwebtoken';
-import { IStation, Station } from "../schemas/Station";
-import { IRating, Rating } from "../schemas/Rating";
-import { nextTick } from "process";
-//import {geolocation} from "../StationGeolocation/StationFilterGeolocation";
 
 export default class Controller<T extends Document> {
 

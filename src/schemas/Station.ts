@@ -1,7 +1,5 @@
-import { model, Model, Schema, Document, Mongoose } from "mongoose";
-import { Db } from "typeorm";
-import { ListFormat } from "typescript";
-import {geoJson} from "GeoJson"
+import { model, Model, Schema, Document } from "mongoose";
+
 
 export interface IStation extends Document {
     CNPJ: string;

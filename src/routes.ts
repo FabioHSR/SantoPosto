@@ -3,7 +3,7 @@ import BaseController from "./controllers/BaseController";
 import UserController from "./controllers/UserController";
 import RatingController from "./controllers/RatingController";
 import StationController from "./controllers/StationController";
-import tokenExtract from "./tokenExtract/tokenExtract";
+import tokenExtract from "./Authentication/Authentication";
 
 const router = Router();
 
@@ -86,18 +86,16 @@ router.patch("/station/:_id", (request, response) => {
 router.get("/station/geolocation/search", (request, response) => {
   stationController.getByGeolocation(request, response)
 })
-
-
 // ----- Fim Station Routes -----
 
 
-// ----- Início Base Routes -----
+// ----- Início Token Routes -----
 const baseController = new BaseController()
 
 // POST TOKEN
 router.post("/Token", (request, response) => {
   baseController.getToken(request, response)
 })
-// ----- Fim Base Routes -----
+// ----- Fim Token Routes -----
 
 export { router };
