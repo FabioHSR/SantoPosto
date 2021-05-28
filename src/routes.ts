@@ -94,7 +94,7 @@ router.get("/station/geolocation/search", (request, response) => {
 // ----- Início Base Routes -----
 const baseController = new BaseController()
 
-// GET ALL
+// POST TOKEN
 router.post("/Token", (request, response) => {
   baseController.getToken(request, response)
 })

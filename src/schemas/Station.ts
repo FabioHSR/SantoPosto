@@ -21,6 +21,7 @@ export interface IStation extends Document {
     location: ILatLng;
 }
 export interface ILatLng extends Document {
+    type: String,
     coordinates: [Number,Number]
 }
 

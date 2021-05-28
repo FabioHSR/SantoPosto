@@ -119,85 +119,7 @@ export default class Controller<T extends Document> {
       })
   }
 
-  // - ADD StationRatingCounter
-  public async addStationRatingCounter(request: Request, response: Response) {
-    const stationId = request.body.station_id
-
-    const stationResponse: Query<IStation, IStation, {}> = Station.findById(stationId)
-
-    const rate = request.body.rate
-    const num = (await stationResponse).rating_num
-    const rating = (await stationResponse).rating
-
-    if (num == undefined) {
-      Station.updateMany(
-        { _id: stationId },
-        { rating_num: 1 },
-        { multi: true },
-        function (err, numberAffected) { });
-    } else {
-      const novoValor = num + 1
-      const avg = this.updateStationRatingAverageOnAdd(
-        num,
-        rating,
-        rate,
-        novoValor
-      )
-      Station.findByIdAndUpdate(stationId, {
-        "rating_num": novoValor,
-        "rating": avg
-      }).exec();
-    }
-  }
-
-  // - DELETE StationRatingCounter
-  public subtractStationRatingCounter(request: Request, response: Response) {
-    return new Promise(async resolve => {
-      const ratingId = request.params._id
-      const ratingResponse: Query<IRating, IRating, {}> = Rating.findById(ratingId)
-
-      const rate = (await ratingResponse).rate
-      const stationId = (await ratingResponse).station_id
-      const stationResponse: Query<IStation, IStation, {}> = Station.findById(stationId)
-
-      const num = (await stationResponse).rating_num
-      const rating = (await stationResponse).rating
-
-      if (num == undefined) {
-        Station.updateMany(
-          { _id: stationId },
-          { rating_num: 0 },
-          { multi: true },
-          function (err, numberAffected) { });
-        resolve("Created rating_num field!");
-      } else {
-        const novoValor = num - 1
-        const avg = this.updateStationRatingAverageOnDelete(
-          num,
-          rating,
-          rate,
-          novoValor
-        )
-        Station.findByIdAndUpdate(stationId, {
-          "rating_num": novoValor,
-          "rating": avg
-        }).exec();
-        resolve("Station rating average updated!");
-      }
-    });
-  }
-
-  // - UPDATE StationRatingAverage on DELETE
-  private updateStationRatingAverageOnAdd(num: number, rating: number, rate: any, novoValor: number) {
-    return ((num * rating) + Number(rate)) / novoValor
-  }
-
-  // - UPDATE StationRatingAverage on INSERT
-  private updateStationRatingAverageOnDelete(num: number, rating: number, rate: any, novoValor: number) {
-    console.log("passou aqui")
-    return ((num * rating) - Number(rate)) / novoValor
-  }
-
+  
   // - GET TOKEN FOR ACCESS
   public async getToken(request: Request, response: Response) {
     if (request.body.user === 'SantoPosto' && request.body.password === 'adm') {
@@ -206,38 +128,4 @@ export default class Controller<T extends Document> {
     }
     response.status(401).end();
   }
-
-  // - GET - returns a list of objects that has the values of geolocalization near of user search
-  protected getByGeolocation(request: Request, response: Response, currentObject: Model<T, {}>) {
-    currentObject.collection.find({
-      location:
-        { $near:
-           {
-             $geometry: { type: "Point",  coordinates: [request.body.lat, request.body.lng ] },
-             $minDistance: 0,
-             $maxDistance: 3000
-           }
-        }
-    }).map(doc => {
-        if (doc) {
-          
-          response.status(200).json(doc)
-        } else {
-          response.status(404).json({ message: 'No valid entry found for provided ID' })
-        }
-      })
-    }
 }
-    //})//.then(doc => {
-      //  if (doc) {
-      //    
-      //    response.status(200).json(doc)
-      //  } else {
-      //    response.status(404).json({ message: 'No valid entry found for provided ID' })
-      //  }
-      //})
-      //.catch(err => {
-      //  response.status(500).json({ error: err })
-      //})
-//  }
-//}
