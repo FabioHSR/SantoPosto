@@ -36,7 +36,7 @@ export default class UserController extends BaseController<IUser> {
     }
 
     // - DELETE - /user/{id} # deletes User with chosen id
-    deleteById(request: Request, response: Response) {
+    async deleteById(request: Request, response: Response) {
         super.deleteById(request, response, User)
     }
 
