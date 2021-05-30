@@ -36,15 +36,19 @@ export default class UserController extends BaseController<IUser> {
     }
 
     // - DELETE - /user/{id} # deletes User with chosen id
-    deleteById(request: Request, response: Response) {
+    async deleteById(request: Request, response: Response) {
         super.deleteById(request, response, User)
     }
 
     // - PUT - /user/{id} # updates User with chosen id
     updateById(request: Request, response: Response) {
-        super.updateUser(request, response)
+        super.update(request, response, User)
     }
-
+    // - PUT - /user/{id} # updates User with chosen id
+    updatePassword(request: Request, response: Response) {
+        //TODO:Impementation
+        throw new AppError("Opsy");
+    }
     // - POST - /user/login
     // login() {
 

@@ -5,33 +5,33 @@ import { IStation, Station } from "../schemas/Station";
 import BaseController from "./BaseController";
 
 export default class StationController extends BaseController<IStation> {
-    // - GET - /postos # returns all Gas Stations
-    getAll(request: Request, response: Response) {
-        super.getAll(request, response, Station, process.env.STATIONS_COLLECTION_NAME)
-    }
+  // - GET - /postos # returns all Gas Stations
+  getAll(request: Request, response: Response) {
+    super.getAll(request, response, Station, process.env.STATIONS_COLLECTION_NAME)
+  }
 
-    // - GET - /posto/{id} # returns Gas Station with chosen id
-    getById(request: Request, response: Response) {
-        super.getById(request, response, Station)
-    }
+  // - GET - /posto/{id} # returns Gas Station with chosen id
+  getById(request: Request, response: Response) {
+    super.getById(request, response, Station)
+  }
 
-    // - POST - /posto # inserts new Gas Station into Collection
-    add(request: Request, response: Response) {
-        super.add(request, response, Station)
-    }
+  // - POST - /posto # inserts new Gas Station into Collection
+  add(request: Request, response: Response) {
+    super.add(request, response, Station)
+  }
 
-    // - DELETE - /posto/{id} # deletes Gas Station with chosen id
-    async deleteById(request: Request, response: Response) {
-        super.deleteById(request, response, Station)
-    }
+  // - DELETE - /posto/{id} # deletes Gas Station with chosen id
+  async deleteById(request: Request, response: Response) {
+    super.deleteById(request, response, Station)
+  }
 
-    // - PUT - /posto/{id} # updates Gas Station with chosen id
-    updateStation(request: Request, response: Response) {
-        super.update(request, response, Station)
-    }
+  // - PUT - /posto/{id} # updates Gas Station with chosen id
+  updateStation(request: Request, response: Response) {
+    super.update(request, response, Station)
+  }
 
-    // - ADD StationRatingCounter
-   public static async addStationRatingCounter(request: Request, response: Response) {
+  // - ADD StationRatingCounter
+  public static async addStationRatingCounter(request: Request, response: Response) {
     const stationId = request.body.station_id
 
     const stationResponse: Query<IStation, IStation, {}> = Station.findById(stationId)
@@ -105,37 +105,69 @@ export default class StationController extends BaseController<IStation> {
 
   // - UPDATE StationRatingAverage on INSERT
   private static updateStationRatingAverageOnDelete(num: number, rating: number, rate: any, novoValor: number) {
-    console.log("passou aqui")
     return ((num * rating) - Number(rate)) / novoValor
   }
 
-       
-    //getByGeolocation(request: Request, response: Response) {
-    //    super.getByGeolocation(request, response, Station)
-    //}
 
-    // - GET - returns a list of objects that has the values of geolocalization near of user search
-    getByGeolocation(request: Request, response: Response) {
-    Station.find({location:
-      { 
-        $near: {
-          $geometry: {
-             type : "Point",
-             coordinates : [ request.body.lng, request.body.lat ]
-          },
-          $minDistance: 1,
-          $maxDistance: 6215
-       }
-
+  // - GET - Redirects the request to filtered or unfiltered search
+  //TODO: Try to unify the queryes to dinamicly add the query part if filterString is not null
+  getByGeolocation(request: Request, response: Response) {
+    if (!request.body.filterString)
+      return this.getByGeolocationUnfiltered(request, response);
+    else
+      return this.getByGeolocationFiltered(request, response);
+  }
+  // - GET - returns a list of top 100 stations near the user
+  getByGeolocationUnfiltered(request: Request, response: Response) {
+    Station.aggregate([
+      {
+        $geoNear: {
+          near: { type: "Point", coordinates: [request.body.lng, request.body.lat] },
+          distanceField: "distance",
+          spherical: true
+        }
       }
-    }).exec().then(
-      doc => {
+    ])
+      .sort({ distance: 1 })
+      .exec().then(
+        doc => {
           if (doc) {
             response.status(200).json(doc)
           } else {
-            response.status(404).json({ message: 'No valid entry found for provided ID' })
+            response.status(404).json({ message: 'No valid entry found' })
           }
         }
-    )
+      )
+  }
+  // - GET - returns a list of top 100 stations near the user, filtered by search pattern
+  getByGeolocationFiltered(request: Request, response: Response) {
+    var regex = new RegExp(request.body.filterString)
+    Station.aggregate([
+      {
+        $geoNear: {
+          near: { type: "Point", coordinates: [request.body.lng, request.body.lat] },
+          distanceField: "distance",
+          query: {
+            $or: [
+              { address: regex },
+              { distributor: regex },
+              { company_name: regex },
+              { CNPJ: regex }
+            ]
+          },
+          spherical: true
+        }
+      }
+    ])
+      .sort({ distance: 1 })
+      .exec().then(
+        doc => {
+          if (doc) {
+            response.status(200).json(doc)
+          } else {
+            response.status(404).json({ message: 'No valid entry found' })
+          }
+        }
+      )
   }
 }
