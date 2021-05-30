@@ -42,9 +42,13 @@ export default class UserController extends BaseController<IUser> {
 
     // - PUT - /user/{id} # updates User with chosen id
     updateById(request: Request, response: Response) {
-        super.updateUser(request, response)
+        super.update(request, response, User)
     }
-
+    // - PUT - /user/{id} # updates User with chosen id
+    updatePassword(request: Request, response: Response) {
+        //TODO:Impementation
+        throw new AppError("Opsy");
+    }
     // - POST - /user/login
     // login() {
 
