@@ -112,17 +112,22 @@ export default class StationController extends BaseController<IStation> {
   // - GET - Redirects the request to filtered or unfiltered search
   //TODO: Try to unify the queryes to dinamicly add the query part if filterString is not null
   getByGeolocation(request: Request, response: Response) {
-    if (!request.body.filterString)
+    console.log("getByGeolocation-called");
+    console.log(request.query.filterString);
+    if (!request.query.filterString)
       return this.getByGeolocationUnfiltered(request, response);
     else
       return this.getByGeolocationFiltered(request, response);
   }
   // - GET - returns a list of top 100 stations near the user
   getByGeolocationUnfiltered(request: Request, response: Response) {
+    console.log("getByGeolocationUnfiltered-called");
+    console.log(request.query.lng);
+      console.log(request.query.lat);
     Station.aggregate([
       {
         $geoNear: {
-          near: { type: "Point", coordinates: [request.body.lng, request.body.lat] },
+          near: { type: "Point", coordinates: [Number(request.query.lng) , Number(request.query.lat)] },
           distanceField: "distance",
           spherical: true
         }
@@ -141,11 +146,12 @@ export default class StationController extends BaseController<IStation> {
   }
   // - GET - returns a list of top 100 stations near the user, filtered by search pattern
   getByGeolocationFiltered(request: Request, response: Response) {
-    var regex = new RegExp(request.body.filterString)
+    console.log("getByGeolocationFiltered-called");
+    var regex = new RegExp(request.query.filterString.toString())
     Station.aggregate([
       {
         $geoNear: {
-          near: { type: "Point", coordinates: [request.body.lng, request.body.lat] },
+          near: { type: "Point", coordinates: [Number(request.query.lng), Number(request.query.lat)] },
           distanceField: "distance",
           query: {
             $or: [
